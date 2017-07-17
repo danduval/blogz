@@ -1,15 +1,19 @@
 {% extends "base.html" %}
+
 {% block content %}
 
 <form action="/blog" method="POST">
 
     <label>Blog Title<br><input type="text" name="title" /></label><br>
+    <span class="error">{{error_1}}</span><br>
 
     <label for="body">Blog Contents</label><br>
     
-    <textarea name="body" rows="4" cols="50">
+    <textarea name="body" rows="4" cols="50" placeholder="{{ body }}">
 
     </textarea><br>
+
+    <span class="error">{{error_2}}</span><br>
     
     <input type="submit" value="publish" />
 

@@ -22,15 +22,42 @@ class Blog(db.Model):
 def index():
 
     if request.method == "POST":
+        # validate first:
         title = request.form['title']
         body = request.form['body']
-        blog = Blog(title, body)
-        db.session.add(blog)
-        db.session.commit()
+        
+        error = False
+        error_1 = ''
+        error_2 = ''
+
+        if title == '':
+            error = True
+            error_1 = "Please enter a title"
+
+        if body == '':
+            error = True
+            error_2 = "Please enter a blog post"
+
+        if error == True:
+            return render_template('new-post.html', error_1=error_1, error_2=error_2, body=body)
+
+        else:
+            blog = Blog(title, body)
+            db.session.add(blog)
+            db.session.commit()
+            return redirect('/blog?id=' + str(blog.id))
 
     blogs = Blog.query.all()
-        
-    return render_template("blog.html", blogs=blogs)
+    
+    if not request.args:
+        return render_template("blog.html", blogs=blogs)
+
+    else:
+        id = request.args.get('id')
+        blogs = Blog.query.filter_by(id=id).all()
+        return render_template("blog.html", blogs=blogs)
+
+    
 
 @app.route('/new_post')
 def new_post():

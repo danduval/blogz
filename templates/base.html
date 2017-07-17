@@ -2,13 +2,37 @@
 <html>
 <head>
     <title>Build A Blog</title>
-</head>
-<span>
-<a href="/blog"><h2>Main Blog</h2></a>
+    <style>
+        nav a {
+            margin: 3rem;
+        }
+        nav {
+            margin-bottom: 6rem;
+            border-style: solid;
+            padding: 1rem;
+        }
+        nav, #title {
+            margin: auto;
+            text-align: center;
+        }
 
-<a href="/new_post"><h2>Add a New Post</h2></a>
-</span>
-<h1>Build A Blog</h1>
+        #title {
+            border-style: solid;
+            margin: 3rem;
+        }
+        html {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        .error {
+            color: red;
+        }
+
+    </style>
+</head>
+<nav>
+<a href="/blog">Main Blog</a><a href="/new_post">Add a New Post</a>
+</nav>
+<h1 id="title">Build A Blog</h1>
 
 <hr>
 
