@@ -39,7 +39,7 @@ def index():
             error_2 = "Please enter a blog post"
 
         if error == True:
-            return render_template('new-post.html', error_1=error_1, error_2=error_2, body=body)
+            return render_template('new-post.html', error_1=error_1, error_2=error_2, body=body, title=title)
 
         else:
             blog = Blog(title, body)
