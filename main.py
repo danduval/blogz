@@ -32,8 +32,27 @@ class User(db.Model):
         self.user = user
         self.password = password
 
-@app.route('/blog', methods=["POST", "GET"])
+# require login
+
+@app.before_request
+def require_login():
+
+    allowed_routes = ['login', 'register', 'blog', 'index', 'blogs_by_author']
+
+    if 'user' not in session and request.endpoint not in allowed_routes:
+        return redirect('/login')
+
+# huh ... this worked for a minute, and now it mysteriously doesn't.  TO DO:  debug this
+
+@app.route("/")
 def index():
+    authors = User.query.all()
+
+    return render_template("index.html", authors=authors)
+
+
+@app.route('/blog', methods=["POST", "GET"])
+def blog():
 
     if request.method == "POST":
         # validate first:
@@ -68,18 +87,35 @@ def index():
             db.session.commit()
             return redirect('/blog?id=' + str(blog.id))
 
-    
+    # if this is a get request with no query parameter, we'll get all objects from the Blog table and pass them into the template.
     
     if not request.args:
         blogs = Blog.query.all()
         return render_template("blog.html", blogs=blogs)
+
+    # if we are handling a "get" request with query parameters, let's get the query parameter out of the request and use it to query the Blog table; only blogs with an "id" attribute matching the query parameter are passed into the template.
 
     else:
         id = request.args.get('id')
         blogs = Blog.query.filter_by(id=id).all()
         return render_template("blog.html", blogs=blogs)
 
-    
+# Here's a handler for get requests which are looking for every blog post by a single author
+
+@app.route('/blogs_by_author')
+def blogs_by_author():
+
+    author = request.args.get('author')
+
+    # now that I've got the author's name in the query, I need to get the corresponding User object
+
+    author = User.query.filter_by(user=author).first()
+
+    # now, let's query the Blog table, getting every Blog object where the owner_id column contains author.id ... in other words, every blog by that author.
+
+    blogs = Blog.query.filter_by(owner_id=author.id).all()
+
+    return render_template("blogs_by_author.html", blogs=blogs)
 
 @app.route('/new_post')
 def new_post():
@@ -196,6 +232,11 @@ def login():
     # uh ... what?  We're not dealing with "Create Account" here ... is this instruction an error?
 
     return render_template('login.html')
+
+@app.route("/logout")
+def logout():
+    del session['user']
+    return redirect("/blog")
 
 if __name__ == '__main__':
     app.run()

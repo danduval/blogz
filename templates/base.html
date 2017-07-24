@@ -10,7 +10,6 @@
             margin: auto;
             border-style: solid;
             padding: 1rem;
-            width: 50%;
         }
         nav, #title {
             margin: auto;
@@ -40,18 +39,37 @@
         }
         body {
             background-color: #6666ff;
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        #wrapper {
+            width: 50%;
+            margin: auto;
+            padding: 3rem;
+            border-style: inset;
+            
         }
 
     </style>
 </head>
-<nav>
-<a href="/blog">Main Blog</a><a href="/new_post">Add a New Post</a><a href="/signup">Sign Up</a><a href="/login">Log In</a>
-</nav>
-<h1 id="title">Build A Blog</h1>
 
+<body>
+
+    <nav>
+        <a href="/blog">Main Blog</a><a href="/new_post">Add a New Post</a><a href="/signup">Sign Up</a><a href="/login">Log In</a><a href="/logout">Log Out</a><a href="/">Authors</a>
+    </nav>
+
+<h1 id="title">Build A Blog</h1>
 <hr>
 
-{% block content %}
-{% endblock %}
+<div id="wrapper">
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+</body>
 
 </html>
