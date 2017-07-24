@@ -115,7 +115,10 @@ def blogs_by_author():
 
     blogs = Blog.query.filter_by(owner_id=author.id).all()
 
-    return render_template("blogs_by_author.html", blogs=blogs)
+    # make a variable for passing the username into the template
+    user = author.user
+
+    return render_template("blogs_by_author.html", blogs=blogs, author=user)
 
 @app.route('/new_post')
 def new_post():
